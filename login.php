@@ -2,7 +2,7 @@
 require_once 'Usuario.php';
 
 if(isset($_POST['cpf']) && !empty($_POST['cpf'])){
-    $cpf = addslashes($_POST['cpf']);
+    $cpf = addslashes($_POST['cpf_ok']);
     $senha = addslashes($_POST['senha']);
     $usuario = new Usuario();
     $usuario->login($cpf, md5($senha));
@@ -15,7 +15,7 @@ if(isset($_POST['cpf']) && !empty($_POST['cpf'])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login - Dream Sistemas</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -31,7 +31,8 @@ if(isset($_POST['cpf']) && !empty($_POST['cpf'])){
                     <form method="POST">
                         <div class="form-group">
                             <label for="cpf">CPF</label>
-                            <input type="text" name="cpf" id="cpf" class="form-control" maxlength="11">
+                            <input type="text" name="cpf" id="cpf" class="form-control" maxlength="14">
+                            <input type="hidden" name="cpf_ok">
                         </div>
                         <div class="form-group">
                             <label for="senha">Senha</label>
