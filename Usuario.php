@@ -33,6 +33,18 @@ class Usuario extends Conexao{
         }
     }
 
+    public function verificarUsuario($cpf){
+        $sql = "SELECT * FROM usuario WHERE cpf = :cpf";
+        $sql = $this->Conectar()->prepare($sql);
+        $sql->bindValue(':cpf', $cpf);
+        $sql->execute();
+        if($sql->rowCount() > 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getUsuarios(){
         $sql = "SELECT * FROM usuario";
         $sql = $this->Conectar()->query($sql);
@@ -100,7 +112,7 @@ class Usuario extends Conexao{
         
         $nr_i = $this->verificarQtdArquivoCpf($cpf);
         
-        if(strlen($cpf) > 0){
+        if(strlen($cpf) > 0 && $this->verificarUsuario($cpf)){
             $sql = "INSERT INTO arquivo (fk_cpf_login, pdf, mimetype, nome) VALUES(:cpf, :pdf, :mimetype, :nome)";
             $sql = $this->Conectar()->prepare($sql);
             $sql->bindValue(":cpf", $cpf);
@@ -119,10 +131,13 @@ class Usuario extends Conexao{
                 echo "alert('Arquivo inserido com sucesso!');";
                 echo "</script>";
             }
-            
+            echo "<script>";
+            //echo "location.href = 'enviar.php';";
+            echo "</script>";
         } else {
             echo "<script>";
             echo "alert('Nenhum paciente selecionado!');";
+            //echo "location.href = 'enviar.php';";
             echo "</script>";
         }
 

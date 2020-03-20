@@ -4,24 +4,6 @@ require_once 'Usuario.php';
 $usuarios = new Usuario();
 $lista = $usuarios->getUsuarios();
 $c = 1;
-if(isset($_FILES['arquivo']['tmp_name']) && !empty($_FILES['arquivo']['tmp_name'])){
-    $file = $_FILES['arquivo'];
-    $cpf = addslashes($_POST['cpf_usuario']);
-    $mimetype = addslashes($file['type']);
-    $format = explode("/", $mimetype);
-    $nomeArquivo = addslashes("Arquivo " . strtoupper($format[1]) . $_POST['cpf_usuario'] . time());
-    $tamanho = $file['size'];
-    $arquivo = $file['tmp_name'];
-    
-    //$fp = fopen($arquivo, "rb");
-    //$conteudo = fread($fp, $tamanho);
-    //fclose($fp);
-
-    //print_r($file);
-    $conteudo = file_get_contents($arquivo);
-    $usuarios->salvarArquivo($cpf, $conteudo, $mimetype, $nomeArquivo);
-        
-} 
     
 ?>
 
@@ -59,7 +41,7 @@ if(isset($_FILES['arquivo']['tmp_name']) && !empty($_FILES['arquivo']['tmp_name'
         <h1> Cadastro de Arquivos </h1>
         <br/>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" action="adicionar_arquivo.php">
         <select name="cpf_usuario" id="" class="form-control w-50 m-2">
         <option value="">Selecione o Paciente</option>
         <?php
