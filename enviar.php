@@ -50,7 +50,7 @@ $c = 1;
             <?php }
         ?>
         </select>
-        <input type="file" name="arquivo" class="form-control w-50 m-2">
+        <input type="file" name="arquivo" class="form-control w-50 m-2" required>
         <input type="submit" value="Enviar" class="btn btn-primary mt-2 m-2">
     </form>
 

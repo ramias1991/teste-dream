@@ -9,6 +9,6 @@ if(isset($_POST['cpf_usuario']) && !empty($_POST['cpf_usuario'])){
     $nomeArquivo = addslashes("Arquivo " . strtoupper($format[1]) . $_POST['cpf_usuario'] . time());
     $arquivo = $_POST['arquivo'];
 
-    $conteudo = file_get_contents($arquivo);
-    $usuarios->salvarArquivo($cpf, $conteudo, $mimetype, $nomeArquivo);
+    //$conteudo = file_get_contents($arquivo);
+    $usuarios->salvarArquivo($cpf, $arquivo, $mimetype, $nomeArquivo);
 } 

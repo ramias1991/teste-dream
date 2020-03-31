@@ -3,7 +3,7 @@ session_start();
 require_once 'Conexao.php';
 
 class Usuario extends Conexao{
-    
+    // Função de login
     public function login($cpf, $senha){
         $sql = "SELECT * FROM usuario WHERE cpf = :cpf";
         $sql = $this->Conectar()->prepare($sql);
@@ -32,7 +32,7 @@ class Usuario extends Conexao{
             echo "</script>";
         }
     }
-
+    // Verifica se o usuário está cadastrado
     public function verificarUsuario($cpf){
         $sql = "SELECT * FROM usuario WHERE cpf = :cpf";
         $sql = $this->Conectar()->prepare($sql);
@@ -44,7 +44,7 @@ class Usuario extends Conexao{
             return false;
         }
     }
-
+    // Pega todos os regitros de usuarios
     public function getUsuarios(){
         $sql = "SELECT * FROM usuario";
         $sql = $this->Conectar()->query($sql);
@@ -56,7 +56,7 @@ class Usuario extends Conexao{
             return $array;
         }
     }
-
+    // Pega apenas um registro de usuario
     public function getUsuario($id){
         $sql = "SELECT * FROM usuario WHERE id = :id";
         $sql = $this->Conectar()->prepare($sql);
@@ -69,6 +69,7 @@ class Usuario extends Conexao{
         }
     }
 
+    // Pega todos os registros de arquivos
     public function getArquivos($cpf){
         $sql = "SELECT * FROM arquivo WHERE fk_cpf_login = :cpf";
         $sql = $this->Conectar()->prepare($sql);
@@ -86,6 +87,7 @@ class Usuario extends Conexao{
         return $array;
     }
 
+    // Pega o arquivo solicitado
     public function abrirArquivo($id){
         $sql = "SELECT * FROM arquivo WHERE id = :id";
         $sql = $this->Conectar()->prepare($sql);
@@ -100,6 +102,7 @@ class Usuario extends Conexao{
         }
     }
 
+    // Função para verificar a quantidade de arquivos para validar se o arquivo foi inserido na função salvarArquivo()
     public function verificarQtdArquivoCpf($cpf){
         $sql = "SELECT * FROM arquivo WHERE fk_cpf_login = :cpf";
         $sql = $this->Conectar()->prepare($sql);
@@ -108,36 +111,44 @@ class Usuario extends Conexao{
         return $sql->rowCount();
     }
 
+    // Função para salar o arquivo na base de dados
     public function salvarArquivo($cpf, $arquivo, $mimetype, $nomeArquivo){
         
         $nr_i = $this->verificarQtdArquivoCpf($cpf);
         
         if(strlen($cpf) > 0 && $this->verificarUsuario($cpf)){
-            $sql = "INSERT INTO arquivo (fk_cpf_login, pdf, mimetype, nome) VALUES(:cpf, :pdf, :mimetype, :nome)";
-            $sql = $this->Conectar()->prepare($sql);
-            $sql->bindValue(":cpf", $cpf);
-            $sql->bindParam(":pdf", $arquivo, PDO::PARAM_LOB);
-            $sql->bindValue("mimetype", $mimetype);
-            $sql->bindValue(":nome", $nomeArquivo);
-            $sql->execute();
+            if($mimetype != null && strlen($mimetype) > 0){
+                $sql = "INSERT INTO arquivo (fk_cpf_login, pdf, mimetype, nome) VALUES(:cpf, :pdf, :mimetype, :nome)";
+                $sql = $this->Conectar()->prepare($sql);
+                $sql->bindValue(":cpf", $cpf);
+                $sql->bindParam(":pdf", $arquivo, PDO::PARAM_LOB);
+                $sql->bindValue("mimetype", $mimetype);
+                $sql->bindValue(":nome", $nomeArquivo);
+                $sql->execute();
 
-            $nr_d = $this->verificarQtdArquivoCpf($cpf);
-            if($nr_i == $nr_d){
+                $nr_d = $this->verificarQtdArquivoCpf($cpf);
+                if($nr_i == $nr_d){
+                    echo "<script>";
+                    echo "alert('Erro ao enviar o arquivo, tente novamente!');";
+                    echo "</script>";
+                } else {
+                    echo "<script>";
+                    echo "alert('Arquivo inserido com sucesso!');";
+                    echo "</script>";
+                }
                 echo "<script>";
-                echo "alert('Erro ao enviar o arquivo, tente novamente!');";
+                echo "location.href = 'enviar.php';";
                 echo "</script>";
             } else {
                 echo "<script>";
-                echo "alert('Arquivo inserido com sucesso!');";
+                echo "alert('Nenhum arquivo selecionado!');";
+                echo "location.href = 'enviar.php';";
                 echo "</script>";
             }
-            echo "<script>";
-            //echo "location.href = 'enviar.php';";
-            echo "</script>";
         } else {
             echo "<script>";
             echo "alert('Nenhum paciente selecionado!');";
-            //echo "location.href = 'enviar.php';";
+            echo "location.href = 'enviar.php';";
             echo "</script>";
         }
 
