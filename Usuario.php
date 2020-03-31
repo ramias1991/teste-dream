@@ -122,7 +122,7 @@ class Usuario extends Conexao{
                 $sql = $this->Conectar()->prepare($sql);
                 $sql->bindValue(":cpf", $cpf);
                 $sql->bindParam(":pdf", $arquivo, PDO::PARAM_LOB);
-                $sql->bindValue("mimetype", $mimetype);
+                $sql->bindValue(":mimetype", $mimetype);
                 $sql->bindValue(":nome", $nomeArquivo);
                 $sql->execute();
 
@@ -131,10 +131,12 @@ class Usuario extends Conexao{
                     echo "<script>";
                     echo "alert('Erro ao enviar o arquivo, tente novamente!');";
                     echo "</script>";
+                    return "Erro ao enviar o arquivo, tente novamente!";
                 } else {
                     echo "<script>";
                     echo "alert('Arquivo inserido com sucesso!');";
                     echo "</script>";
+                    return 'Arquivo inserido com sucesso!';
                 }
                 echo "<script>";
                 echo "location.href = 'enviar.php';";
@@ -144,10 +146,12 @@ class Usuario extends Conexao{
                 echo "alert('Nenhum arquivo selecionado!');";
                 echo "location.href = 'enviar.php';";
                 echo "</script>";
+                return "Nenhum Arquivo selecionado!";
             }
         } else {
             echo "<script>";
             echo "alert('Nenhum paciente selecionado!');";
+            return 'Nenhum paciente selecionado!';
             echo "location.href = 'enviar.php';";
             echo "</script>";
         }
